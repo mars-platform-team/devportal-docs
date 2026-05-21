@@ -1,0 +1,26 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: devportal-docs
+  title: Developer Portal Documentation
+  description: User documentation for the Developer Portal (Backstage + MARS Rover)
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: mars-platform-team/devportal-docs
+  tags:
+    - documentation
+    - mars-rover
+    - developer-portal
+    - epinio-migration
+  links:
+    - url: https://github.com/mars-platform-team/devportal-docs
+      title: GitHub Repository
+      icon: github
+    - url: https://github.com/mars-platform-team/devportal-rover-service
+      title: Rover Service
+      icon: code
+spec:
+  type: documentation
+  lifecycle: production
+  owner: group:default/sg_-_pcf_platform_admin
+  system: mars-devportal
