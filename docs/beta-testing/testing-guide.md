@@ -335,48 +335,6 @@ For beta testing, apps may already be deployed to DevPortal for you.
 
 ---
 
-## Comparison: Epinio UI vs Backstage UI
-
-After testing, compare your experience:
-
-| Aspect | Better | Same | Worse | Notes |
-|--------|--------|------|-------|-------|
-| Finding my applications | ☐ | ☐ | ☐ | |
-| Viewing application status | ☐ | ☐ | ☐ | |
-| Checking logs | ☐ | ☐ | ☐ | |
-| Updating configuration | ☐ | ☐ | ☐ | |
-| Restarting applications | ☐ | ☐ | ☐ | |
-| Scaling instances | ☐ | ☐ | ☐ | |
-| Understanding errors | ☐ | ☐ | ☐ | |
-| Overall ease of use | ☐ | ☐ | ☐ | |
-
----
-
-## Feedback Template
-
-For each feature you test, provide feedback:
-
-### Feature: _[e.g., "Scale Application"]_
-
-**Status:** ✅ Works perfectly / ⚠️ Works with issues / ❌ Broken
-
-**What I tested:**
-- [Describe what you did]
-
-**What worked well:**
-- [List positive aspects]
-
-**Issues encountered:**
-- [Describe problems, include screenshots or status messages if applicable]
-
-**Comparison to Epinio:**
-- [Better/Same/Worse and why - consider UI experience, ease of use, and workflow efficiency]
-
-**Suggestions:**
-- [How could this be improved?]
-
----
-
 ## Getting Help
 
 **During testing, if you encounter issues:**
@@ -442,10 +400,10 @@ At the end of your testing, you should be able to:
 - ✅ Understand what's happening through clear status messages
 - ✅ Feel confident managing your applications without Epinio
 
-**If any of these feel uncertain or difficult, please provide detailed feedback so we can improve before general release.**
+**If any of these feel uncertain or difficult, note it down — we will be meeting with you at the end of the two-week period to collect your feedback before go-live.**
 
 ---
 
 **Thank you for participating in the beta test!**
 
-Your feedback is critical to ensuring a smooth migration for all teams.
+Your feedback will be gathered in person and is critical to ensuring a smooth migration for all teams.
