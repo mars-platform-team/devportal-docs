@@ -326,10 +326,7 @@ Given the differences above, please focus beta testing on:
 
 ## Timeline & Support
 
-**Beta Testing Phase**: 4 weeks
-- Week 1: Read-only testing (view, monitor)
-- Week 2-3: Full testing (deploy, update, manage)
-- Week 4: Production-like workloads, feedback collection
+**Beta Testing Phase**: You have **two weeks** to explore and test the portal at your own pace. At the end of the two-week period, we'll collect your feedback before making a go-live decision.
 
 **Migration Support**:
 - Platform team available for questions

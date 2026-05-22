@@ -36,6 +36,34 @@ mkdocs serve
 # View at http://localhost:8000
 ```
 
+## 🚢 Deploying to S3 (Manual Publish)
+
+TechDocs are normally rebuilt automatically when changes are pushed to `main`. Use the steps below only when you need to manually publish to the S3 bucket (`devportal-tools-devportal-techdocs`).
+
+### Prerequisites
+
+- Node.js installed
+- AWS credentials configured for the `tools` account (run `switchprofile tools` if using profile switching)
+
+### Steps
+
+```bash
+# 1. Build the static TechDocs site
+npx @techdocs/cli generate --source-dir . --output-dir ./site
+
+# 2. Publish to S3
+npx @techdocs/cli publish \
+  --publisher-type awsS3 \
+  --storage-name devportal-tools-devportal-techdocs \
+  --entity default/component/devportal-docs \
+  --directory ./site
+```
+
+> **Note**: The `--entity` value must match the catalog entity exactly: `<namespace>/<kind>/<name>` in lowercase.  
+> For this repo: `default/component/devportal-docs`
+
+---
+
 ## ✏️ Contributing
 
 ### Making Changes

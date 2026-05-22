@@ -39,8 +39,8 @@ Click on **"Applications"** in the left sidebar. You'll see the catalog of regis
 
 In the MARS Rover tab:
 
-1. **Platform Dropdown**: Select which platform/cluster (e.g., `eks-prod-us-east-1`)
-2. **Environment Dropdown**: Select which environment (e.g., `dev`, `qa`, `prod`)
+1. **Platform Dropdown**: Select which platform/cluster (e.g., `cp-nonprod`)
+2. **Environment Dropdown**: Select which environment (e.g., `intg`, `qa`, `prod`)
 
 !!! info "Single Portal"
     Unlike Epinio where you had separate portals per platform, the Developer Portal provides access to **all platforms and environments** from one place.

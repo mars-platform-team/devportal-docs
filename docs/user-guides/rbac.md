@@ -14,6 +14,8 @@ Admin > Lead > Developer > Viewer
 
 Each higher role inherits all permissions of lower roles.
 
+> **Team-scoped roles**: Your role may differ per platform. For example, you could be a Lead on the `cp` platform but a Developer on `fhk`. The portal resolves your effective permissions for each platform you switch to.
+
 ## Role Definitions
 
 ### Viewer
@@ -37,16 +39,21 @@ Each higher role inherits all permissions of lower roles.
 
 ### Developer
 
-**Description**: Can deploy and manage applications
+**Description**: Can deploy and manage applications in non-production; read-only on production
 
 **Can** (in addition to Viewer):
-- ✅ Create applications
-- ✅ Update configuration
+- ✅ Update configuration (non-production and production)
 - ✅ Restart applications
 - ✅ Scale applications
 - ✅ Stop/start applications
+- ✅ Exec into pods (non-production only)
 
-**Cannot**:
+**Read-only on production** (cannot modify):
+- ❌ Update/write configuration on production
+- ❌ Restart, scale, or stop production apps
+- ❌ Exec into production pods
+
+**Cannot** (any tier):
 - ❌ Delete applications
 - ❌ Manage platform services
 
@@ -54,10 +61,12 @@ Each higher role inherits all permissions of lower roles.
 
 ### Lead
 
-**Description**: Full team application management including deletion
+**Description**: Full team application management including deletion, with full read/write access on all tiers
 
 **Can** (in addition to Developer):
 - ✅ Delete applications
+- ✅ Modify and restart production applications
+- ✅ Exec into pods on all tiers (including production)
 - ✅ Manage team applications fully
 
 **Cannot**:
@@ -82,15 +91,37 @@ Each higher role inherits all permissions of lower roles.
 
 ### How It Works
 
-Access is controlled by **two factors**:
+Access is controlled by **three factors**:
 
 1. **Your Role**: Determines what you can do
-2. **Your Team Membership**: Determines what you can access
+2. **Your Team Membership**: Determines which platforms you can access
+3. **Environment Tier**: Determines what your role permits (non-production vs production)
+
+### Team-Scoped Roles
+
+You can hold **different roles on different platforms**. The portal resolves your highest effective role when you switch between platforms.
+
+**Examples:**
+- `cp_leads` — Lead on the `cp` platform (and all environments under it, e.g. `cp-prod`, `cp-dev`)
+- `fhk_developers` — Developer on the `fhk` platform only
+- `admins` — Global Admin across all platforms
+
+If you have both `cp_leads` and `fhk_developers`, you'll have Lead permissions on `cp` environments and Developer permissions on `fhk` environments.
+
+### Production vs Non-Production Tiers
+
+| Tier | Developer | Lead | Admin |
+|------|-----------|------|-------|
+| Non-production (dev, qa, uat) | Full read/write | Full read/write | Full read/write |
+| Production | **Read-only** | Full read/write | Full read/write |
+
+Developers cannot modify applications or exec into pods in production environments. They will see production apps and logs, but action buttons are disabled.
 
 Example:
 - User is a **Developer** on the **Falcon** team
-- Can manage Falcon team apps in dev/qa/prod
-- Cannot access Phoenix team apps
+- Can create/update/restart Falcon apps in dev and qa environments
+- Can **view** Falcon apps in production, but **cannot** change them
+- Cannot access Phoenix team apps in any environment
 - Cannot delete any applications (requires Lead role)
 
 ### Azure AD Integration

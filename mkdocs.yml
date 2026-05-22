@@ -24,6 +24,8 @@ nav:
       - Troubleshooting: reference/troubleshooting.md
       - Glossary: reference/glossary.md
       - Support: reference/support.md
+  - CI/CD:
+      - Publishing Pipeline: ci/pipeline.md
 theme:
   name: material
   palette:

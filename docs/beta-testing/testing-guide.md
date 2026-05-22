@@ -7,6 +7,7 @@ This guide helps you test the new Backstage-based Developer Portal as a replacem
 **Out of Scope for Initial Testing:**
 - Jenkins deployment triggers (handled by platform team)
 - First-time deployments via CI/CD
+- Creating new applications (handled by CI/CD pipeline)
 - Deep log analysis and troubleshooting (use Grafana & Loki)
 
 ---
@@ -67,10 +68,12 @@ For beta testing, apps may already be deployed to DevPortal for you.
 - [ ] Confirm you can see the "My Access" panel showing your permissions
 
 **Note your role - it determines what actions you can perform:**
-- **Viewer**: Read-only access
-- **Developer**: Can create, update, restart, scale apps
-- **Lead**: Everything Developer can do, plus delete apps
-- **Admin**: Full access including platform services
+- **Viewer**: Read-only access to all applications on your assigned platforms
+- **Developer**: Can update configuration, restart, scale, stop/start apps. **On production environments, Developers have read-only access** — only Leads and Admins can modify production apps.
+- **Lead**: Everything Developer can do plus delete apps; full read/write on all tiers including production
+- **Admin**: Full access including platform services across all environments
+
+**Team-scoped roles**: You may have different roles on different platforms. For example, you could be a Lead on the `cp` platform but a Developer on `cpfhk`. Your effective permissions are resolved per platform when you switch environments.
 
 **If you need additional access**: Contact MARS Platform Team to request access to additional platforms or role changes.
 
@@ -143,8 +146,7 @@ For beta testing, apps may already be deployed to DevPortal for you.
 - [ ] Click "Edit Configuration" or "Update Manifest"
 - [ ] Change an environment variable value
 - [ ] Save changes
-- [ ] Note the operation ID returned
-- [ ] Wait for operation to complete
+- [ ] Wait for operation to complete (watch the status indicator)
 - [ ] Verify the change appears in application details
 - [ ] Check that your app restarted with new config
 
@@ -162,8 +164,7 @@ For beta testing, apps may already be deployed to DevPortal for you.
 #### Restart Application
 - [ ] Click "Restart" button or menu item
 - [ ] Confirm restart action
-- [ ] See operation ID for tracking
-- [ ] Wait for restart to complete (watch status)
+- [ ] Wait for restart to complete (watch status indicator)
 - [ ] Verify instances are recreated
 - [ ] Confirm application is accessible after restart
 - [ ] Check that restart involved zero downtime (if multiple instances)
@@ -171,53 +172,41 @@ For beta testing, apps may already be deployed to DevPortal for you.
 #### Stop Application
 - [ ] Click "Stop" button
 - [ ] Confirm stop action
-- [ ] Track the operation status
+- [ ] Wait for operation to complete (watch status indicator)
 - [ ] Verify all instances shut down
 - [ ] Confirm application still appears in list (not deleted)
 - [ ] Check that routes return an error (app is stopped)
 
 #### Start Application
 - [ ] Click "Start" button (on a stopped app)
-- [ ] Track operation to completion
+- [ ] Wait for operation to complete (watch status indicator)
 - [ ] Verify instances start running
 - [ ] Confirm application becomes accessible
 
 #### Scale Application
 - [ ] Find the scaling control (slider, input, or menu)
 - [ ] Increase instance count (e.g., 1 → 3)
-- [ ] Track scaling operation
+- [ ] Wait for scaling to complete (watch status indicator)
 - [ ] Verify the correct number of instances are running
 - [ ] Decrease instance count (e.g., 3 → 1)
 - [ ] Confirm instances scale down correctly
 - [ ] Try scaling to 0 (should stop the app)
 
 **What to verify:**
-- Each action returns an operation ID
-- You can track progress of each operation
-- Operations complete successfully within reasonable time
+- Operations complete successfully within a reasonable time (duration depends on instance count and environment)
 - Application behaves as expected after each action
 - Clear error messages if something fails
 
 ---
 
-### Creating and Deleting Applications
-
-#### Create New Application (Developer/Lead/Admin Only)
-- [ ] Click "Create Application" or "New App" button
-- [ ] Enter application name (must be unique in environment)
-- [ ] Select or enter chart version
-- [ ] Provide initial configuration (environment variables, instance count, etc.)
-- [ ] Submit and receive operation ID
-- [ ] Track creation progress
-- [ ] Verify new app appears in application list
-- [ ] Confirm app is accessible at its routes
+### Deleting Applications
 
 #### Delete Application (Lead/Admin Only)
 - [ ] Select an application you can delete
 - [ ] Click "Delete" button
 - [ ] Read deletion warning carefully
 - [ ] Confirm deletion
-- [ ] Track deletion operation
+- [ ] Wait for deletion to complete (watch status indicator)
 - [ ] Verify app is removed from list
 - [ ] Confirm routes are no longer accessible
 
@@ -231,11 +220,10 @@ For beta testing, apps may already be deployed to DevPortal for you.
 ### Operation Tracking
 
 #### Monitor Operation Status
-- [ ] After any action, note the operation ID
-- [ ] View operation status page/panel
+- [ ] After triggering any action, view the operation status panel
 - [ ] See operation progress messages
 - [ ] Watch status change from "pending" → "in progress" → "completed"
-- [ ] For failures, see error message explaining what went wrong
+- [ ] For failures, see an error message explaining what went wrong
 - [ ] Verify completed operations disappear after some time (cleanup)
 
 #### View Operation History
@@ -246,7 +234,6 @@ For beta testing, apps may already be deployed to DevPortal for you.
 - [ ] View error messages for failed operations
 
 **What to verify:**
-- Operations complete within expected time (most < 30 seconds)
 - Status updates appear without manual refresh
 - Error messages are helpful and actionable
 - Can track multiple operations on different apps simultaneously
@@ -259,7 +246,7 @@ For beta testing, apps may already be deployed to DevPortal for you.
 1. View your application's current configuration
 2. Note an existing environment variable value
 3. Edit the configuration and change that value
-4. Save and track the update operation
+4. Save and watch the operation status
 5. Wait for operation to complete
 6. Verify the change in configuration view
 7. Check your application's behavior reflects the new value
@@ -285,7 +272,7 @@ For beta testing, apps may already be deployed to DevPortal for you.
 1. Identify an application that needs to be stopped immediately
 2. Click "Stop" button
 3. Confirm stop action
-4. Verify all instances shut down within 30 seconds
+4. Verify all instances shut down (time depends on instance count)
 5. Confirm application is inaccessible
 6. Leave stopped for testing, or start it back up
 
@@ -302,6 +289,7 @@ For beta testing, apps may already be deployed to DevPortal for you.
 
 ### Permission Errors
 - [ ] Try to delete an app as a Developer (should fail with clear message)
+- [ ] As a Developer, try to modify an app in a **production** environment (should be denied — Developers are read-only on prod)
 - [ ] Try to access another team's environment (should be denied)
 - [ ] Attempt an action you're not authorized for
 - [ ] Verify error messages explain what permission you need
@@ -334,14 +322,14 @@ For beta testing, apps may already be deployed to DevPortal for you.
 | Browse application list | < 2 seconds | Slow loading, timeouts |
 | View application details | < 1 second | Delays, missing data |
 | Open log viewer | < 3 seconds | Connection failures, lag |
-| Start/Stop application | 10-30 seconds | Excessive delays, failures |
-| Scale application | 15-45 seconds | Slow scaling, stuck operations |
-| Update configuration | 20-60 seconds | Timeouts, failed updates |
-| Restart application | 20-60 seconds | Excessive downtime |
+| Start/Stop application | Varies by instance count | Excessive delays, failures |
+| Scale application | Varies by instance count | Slow scaling, stuck operations |
+| Update configuration | Varies by instance count | Timeouts, failed updates |
+| Restart application | Varies by instance count | Excessive downtime, no recovery |
 
-**If you're experiencing slower response times, note:**
+**Operation duration depends on the number of instances** — a single-instance app will complete significantly faster than one with 5+ instances. If you're experiencing unusually long operations, note:
+- Number of running instances
 - Time of day (peak hours vs off-peak)
-- Number of instances in your application
 - Complexity of configuration changes
 - Any error messages or warnings
 
@@ -379,7 +367,7 @@ For each feature you test, provide feedback:
 - [List positive aspects]
 
 **Issues encountered:**
-- [Describe problems, include operation IDs if applicable]
+- [Describe problems, include screenshots or status messages if applicable]
 
 **Comparison to Epinio:**
 - [Better/Same/Worse and why - consider UI experience, ease of use, and workflow efficiency]
@@ -395,7 +383,6 @@ For each feature you test, provide feedback:
 
 1. **Note the details:**
    - Timestamp when issue occurred
-   - Operation ID (if applicable)
    - Application name and environment
    - Your role/permissions
    - What you were trying to do

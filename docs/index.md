@@ -10,7 +10,7 @@ The Developer Portal is a Backstage-based platform that replaces Epinio for appl
 - **Application Management**: Deploy, configure, scale, and monitor your applications
 - **Role-Based Access**: Fine-grained permissions based on your team and role
 - **CI/CD Integration**: Seamless integration with Jenkins pipelines
-- **Real-Time Monitoring**: View logs, check health, and track operations
+- **Real-Time Engagement**: View logs, check health, and track operations
 
 ## 📖 Quick Navigation
 
@@ -65,11 +65,7 @@ Four-tier role system (Admin, Lead, Developer, Viewer) with team-based access co
 !!! success "Ready for Beta Testing"
     The platform is ready for beta testing. Contact the MARS Platform Team to request access.
 
-### Migration Timeline
-- **Week 1**: Read-only testing (view apps, logs, monitoring)
-- **Week 2-3**: Full testing (deploy, update, manage applications)
-- **Week 4**: Production-like workloads and feedback collection
-- **Go-Live**: After beta feedback incorporation and sign-off
+You have **two weeks** to explore and test the portal. At the end of the two-week period, we'll collect your feedback before making a decision to go live.
 
 ## 📋 Before You Start
 
