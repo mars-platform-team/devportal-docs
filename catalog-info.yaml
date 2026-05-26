@@ -22,5 +22,5 @@ metadata:
 spec:
   type: documentation
   lifecycle: production
-  owner: group:default/sg_-_pcf_platform_admin
+  owner: group:default/maximus
   system: mars-devportal
