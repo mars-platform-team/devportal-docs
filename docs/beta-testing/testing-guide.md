@@ -8,6 +8,7 @@ This guide helps you test the new Backstage-based Developer Portal as a replacem
 - Jenkins deployment triggers (handled by platform team)
 - First-time deployments via CI/CD
 - Creating new applications (handled by CI/CD pipeline)
+- Updating application manifests or configuration (out of scope for this beta)
 - Deep log analysis and troubleshooting (use Grafana & Loki)
 
 ---
@@ -50,9 +51,7 @@ For beta testing, apps may already be deployed to DevPortal for you.
 | View application details | View application details page |
 | Delete application button | Delete application button |
 | View application logs | Real-time log viewer |
-| Edit app configuration/chart values | Update application configuration |
 | Restart/scale application | Application management actions |
-| Environment variables configuration | Configuration manifest editor |
 
 ---
 
@@ -131,7 +130,9 @@ For beta testing, apps may already be deployed to DevPortal for you.
 
 ---
 
-### Managing Application Configuration
+### Viewing Application Configuration
+
+> **Note**: Updating manifests or configuration is out of scope for this beta. Testing is read-only for configuration.
 
 #### View Current Configuration
 - [ ] Open "Configuration" or "Manifest" tab
@@ -141,21 +142,6 @@ For beta testing, apps may already be deployed to DevPortal for you.
 - [ ] View resource limits (CPU, memory)
 - [ ] See exposed routes and ports
 - [ ] Download configuration as YAML or JSON
-
-#### Update Configuration
-- [ ] Click "Edit Configuration" or "Update Manifest"
-- [ ] Change an environment variable value
-- [ ] Save changes
-- [ ] Wait for operation to complete (watch the status indicator)
-- [ ] Verify the change appears in application details
-- [ ] Check that your app restarted with new config
-
-**Test scenarios:**
-- Add a new environment variable
-- Update an existing environment variable value
-- Change instance count (scale up/down)
-- Modify resource limits
-- Add or update route configuration
 
 ---
 
@@ -242,16 +228,7 @@ For beta testing, apps may already be deployed to DevPortal for you.
 
 ## Testing Scenarios
 
-### Scenario 1: Update Environment Variable
-1. View your application's current configuration
-2. Note an existing environment variable value
-3. Edit the configuration and change that value
-4. Save and watch the operation status
-5. Wait for operation to complete
-6. Verify the change in configuration view
-7. Check your application's behavior reflects the new value
-
-### Scenario 2: Scale for Load Testing
+### Scenario 1: Scale for Load Testing
 1. Check current instance count (e.g., 1)
 2. Scale up to 3 instances
 3. Verify all 3 instances are running and healthy
@@ -259,16 +236,14 @@ For beta testing, apps may already be deployed to DevPortal for you.
 5. Scale back down to 1 instance
 6. Verify only 1 instance remains
 
-### Scenario 3: Troubleshoot a Failed Instance
+### Scenario 2: Troubleshoot a Failed Instance
 1. Find an application with a failed or restarting instance
 2. Check the restart count (is it restarting repeatedly?)
 3. View logs to identify error messages
-4. Based on logs, determine if it's a configuration issue
-5. Update configuration to fix the issue
-6. Restart the application
-7. Verify instances are now healthy
+4. Restart the application
+5. Verify instances are now healthy
 
-### Scenario 4: Emergency Stop
+### Scenario 3: Emergency Stop
 1. Identify an application that needs to be stopped immediately
 2. Click "Stop" button
 3. Confirm stop action
@@ -276,9 +251,25 @@ For beta testing, apps may already be deployed to DevPortal for you.
 5. Confirm application is inaccessible
 6. Leave stopped for testing, or start it back up
 
+### Scenario 4: Manifest Update via CI/CD Reflects in UI
+This scenario verifies that when a manifest change is pushed through your CD pipeline, the updated configuration is visible in DevPortal after deployment.
+
+1. Note the current configuration of your application in DevPortal (e.g., instance count, an environment variable value, or a resource limit)
+2. Make a change to the manifest in your source repository (e.g., update an environment variable or instance count)
+3. Trigger your CD pipeline as normal
+4. Wait for the pipeline job to complete successfully
+5. Return to DevPortal and open the application details
+6. Open the Configuration tab and verify the change is reflected
+7. Check that the application is running with the updated configuration (correct instance count, new env var value, etc.)
+
+**What to verify:**
+- The manifest displayed in DevPortal matches what was deployed by the pipeline
+- The application status returns to healthy after the re-deploy
+- No stale or cached values are shown
+
 ### Scenario 5: Multi-App Management
 1. Open 3 different applications in separate browser tabs
-2. Make a different change to each app (restart, scale, config update)
+2. Perform a different action on each app (restart, stop, scale)
 3. Track all 3 operations simultaneously
 4. Verify each completes independently without conflicts
 5. Confirm no operation affected the wrong application
@@ -296,10 +287,6 @@ For beta testing, apps may already be deployed to DevPortal for you.
 
 ### Invalid Input
 - [ ] Try to scale to negative instances (should reject)
-- [ ] Enter invalid YAML/JSON in configuration editor (should validate)
-- [ ] Use a duplicate application name (should reject)
-- [ ] Provide invalid environment variable names (special characters)
-- [ ] Submit empty required fields
 
 ### Conflict Handling
 - [ ] Start an operation (e.g., restart)
